@@ -128,11 +128,17 @@ export const Footer: React.FC = () => {
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p>© {new Date().getFullYear()} TITAN FORGE ATHLETICS LLC. All Rights Reserved. Built for Peak Performance.</p>
+        {/* Bottom Bar with Human Signature */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+          <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+            <span>© {new Date().getFullYear()} TITAN FORGE ATHLETICS. All Rights Reserved.</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="inline-flex items-center gap-1.5 text-slate-300 font-medium">
+              <span>Handcrafted with passion for real athletes</span>
+            </span>
+          </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap justify-center">
             <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
             <span>•</span>
             <span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span>
@@ -141,7 +147,7 @@ export const Footer: React.FC = () => {
             
             <button
               onClick={scrollToTop}
-              className="ml-4 p-2 rounded-xl bg-gym-card hover:bg-gym-accent text-slate-300 hover:text-white border border-gym-border hover:border-gym-accent transition-all cursor-pointer flex items-center gap-1"
+              className="ml-2 p-2 rounded-xl bg-gym-card hover:bg-gym-accent text-slate-300 hover:text-white border border-gym-border hover:border-gym-accent transition-all cursor-pointer flex items-center gap-1"
               title="Scroll to Top"
             >
               <ArrowUp className="w-4 h-4" />

@@ -3,10 +3,10 @@ import type { Program, MembershipPlan, Trainer, GalleryItem, Facility, Testimoni
 export const GYM_CONFIG = {
   name: "TITAN FORGE GYM",
   tagline: "Build Your Body. Build Your Confidence.",
-  phone: "+1 (800) 848-2636", // Customizable
-  cleanPhone: "18008482636",
-  whatsappNumber: "15551234567", // Direct WhatsApp international format without +
-  whatsappDefaultMsg: "Hello Titan Forge! I am interested in joining the gym. Please share membership details and schedule a free guest pass.",
+  phone: "+91 88850 23504", // Updated
+  cleanPhone: "918885023504",
+  whatsappNumber: "918885023504", // 8885023504 with country code
+  whatsappDefaultMsg: "Hello Titan Forge Gym! I am interested in joining. Please share membership plans and schedule my free 1-day pass.",
   email: "contact@titanforgegym.com",
   address: "742 Evergreen Fitness Blvd, Downtown Athletic District, CA 90210",
   googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d105658.07925875249!2d-118.42398579999999!3d34.020478999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2ba7064d6e9d7%3A0xb376b53a0604a11b!2sLos%20Angeles%2C%20CA!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus",

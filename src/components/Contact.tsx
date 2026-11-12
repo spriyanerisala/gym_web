@@ -159,16 +159,23 @@ export const Contact: React.FC<ContactProps> = ({
             </p>
           </div>
 
-          {/* Card 2 */}
+          {/* Card 2: Direct Phone & WhatsApp */}
           <div className="bg-gym-card p-6 rounded-2xl border border-gym-border hover:border-gym-accent/40 transition-colors">
             <div className="w-12 h-12 rounded-xl bg-gym-accent/15 text-gym-accent flex items-center justify-center mb-4">
               <Phone className="w-6 h-6" />
             </div>
-            <h4 className="text-lg font-bold text-white font-heading uppercase mb-1">Direct Call</h4>
-            <a href={`tel:${GYM_CONFIG.cleanPhone}`} className="text-xs font-semibold text-gym-accent hover:underline block">
-              {GYM_CONFIG.phone}
+            <h4 className="text-lg font-bold text-white font-heading uppercase mb-1">Direct Call & WhatsApp</h4>
+            <a href="tel:+918885023504" className="text-xs font-semibold text-gym-accent hover:underline block">
+              +91 88850 23504
             </a>
-            <span className="text-[11px] text-slate-500 mt-1 block">Toll-free customer concierge</span>
+            <a 
+              href="https://wa.me/918885023504?text=Hello%20Titan%20Forge%20Gym!%20I%20am%20interested%20in%20joining.%20Please%20share%20details."
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 mt-2"
+            >
+              <span>Chat on WhatsApp (+91 88850 23504) →</span>
+            </a>
           </div>
 
           {/* Card 3 */}

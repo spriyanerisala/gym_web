@@ -123,11 +123,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEnquiry }) => {
           {/* Right Action Buttons */}
           <div className="hidden lg:flex items-center gap-3">
             <a
-              href="tel:18008482636"
+              href="tel:+918885023504"
               className="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition-colors"
             >
               <PhoneCall className="w-3.5 h-3.5 text-gym-accent" />
-              <span>(800) 848-2636</span>
+              <span>+91 88850 23504</span>
             </a>
 
             <button
@@ -183,9 +183,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEnquiry }) => {
 
           <div className="pt-2 flex flex-col gap-3">
             <div className="flex items-center justify-between px-2 text-xs text-slate-400">
-              <span>Customer Desk</span>
-              <a href="tel:18008482636" className="text-gym-accent font-bold hover:underline">
-                +1 (800) 848-2636
+              <span>Front Desk Concierge</span>
+              <a href="tel:+918885023504" className="text-gym-accent font-bold hover:underline">
+                +91 88850 23504
               </a>
             </div>
 

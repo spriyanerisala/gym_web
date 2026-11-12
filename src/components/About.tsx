@@ -119,6 +119,24 @@ export const About: React.FC<AboutProps> = ({ onOpenEnquiry }) => {
               })}
             </div>
 
+            {/* Human Founder Note & Personal Touch */}
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-white/5 to-white/[0.02] border-l-4 border-gym-accent border-y border-r border-white/5 mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-sm font-bold text-white uppercase tracking-wide">
+                  A Personal Note From The Founders
+                </span>
+                <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-gym-accent/20 text-gym-accent font-bold">
+                  Built by Lifters, for Lifters
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 italic leading-relaxed">
+                "We didn't build Titan Forge from a corporate spreadsheet. We spent years in underground gyms with rusted barbells, dealing with broken equipment and pushy sales staff. We created this space to give everyday athletes the professional-level coaching, honest prices, and community respect we always wished existed."
+              </p>
+              <div className="mt-2 text-[11px] text-gym-accent font-semibold">
+                — Marcus Vance & Elena Rostova, Co-Founders & Head Coaches
+              </div>
+            </div>
+
             {/* CTA Link */}
             <div className="flex items-center gap-4">
               <button

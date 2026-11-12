@@ -12,6 +12,7 @@ import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { GymChatbot } from './components/GymChatbot';
 
 export const App: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>('Standard Plan');
@@ -107,6 +108,9 @@ export const App: React.FC = () => {
 
       {/* Floating WhatsApp Action Button */}
       <FloatingWhatsApp />
+
+      {/* Interactive Gym AI Chatbot */}
+      <GymChatbot />
     </div>
   );
 };
