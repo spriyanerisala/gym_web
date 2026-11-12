@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, X, ChevronRight, Dumbbell } from 'lucide-react';
-import { GYM_CONFIG, MEMBERSHIP_PLANS, PROGRAMS, TRAINERS, OFFERS } from '../data/gymData';
+import { GYM_CONFIG } from '../data/gymData';
 
 interface Message {
   id: string;
@@ -8,9 +8,9 @@ interface Message {
   text: string;
   timestamp: string;
   action?: {
-    type: 'whatsapp' | 'scroll';
+    type: 'scroll';
     label: string;
-    target?: string;
+    target: string;
   };
 }
 
@@ -24,7 +24,7 @@ export const GymChatbot: React.FC = () => {
     {
       id: 'm1',
       sender: 'bot',
-      text: `Hey there! Welcome to Titan Forge. I'm Alex from member support. How can I help you crush your fitness goals today? Feel free to ask about our plans, coaches, class timings, or current discounts!`,
+      text: `Hey! I'm your Titan Forge virtual assistant. What can I answer for you today? Ask about membership prices, free passes, coaches, timings, or workouts.`,
       timestamp: 'Just now'
     }
   ];
@@ -32,11 +32,11 @@ export const GymChatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
 
   const quickQuestions = [
-    "What are your membership prices?",
-    "Tell me about the coaches",
-    "What programs do you offer?",
-    "Do you have a free trial pass?",
-    "What are your gym timings?"
+    "How much is the membership?",
+    "Do you have a free guest pass?",
+    "Who are the coaches?",
+    "What are your gym hours?",
+    "What facilities do you have?"
   ];
 
   useEffect(() => {
@@ -45,26 +45,43 @@ export const GymChatbot: React.FC = () => {
     }
   }, [messages, isOpen]);
 
+  // Precise, direct response engine answering EXACTLY what was asked
   const generateAnswer = (query: string): { text: string; action?: Message['action'] } => {
-    const q = query.toLowerCase();
+    const q = query.toLowerCase().trim();
 
-    // Pricing / Memberships
-    if (q.includes('price') || q.includes('cost') || q.includes('membership') || q.includes('plan') || q.includes('fee')) {
-      const plansList = MEMBERSHIP_PLANS.map(p => `• ${p.name}: $${p.monthlyPrice}/mo ($${p.annualPrice}/mo billed annually)`).join('\n');
+    // 1. Greetings / Small talk
+    if (q === 'hi' || q === 'hello' || q === 'hey' || q === 'yo' || q.startsWith('good morning') || q.startsWith('good evening')) {
       return {
-        text: `Here are our current membership tiers (month-to-month or annual 20% off):\n\n${plansList}\n\nOur Standard Plan ($69/mo) is our most popular package and includes unlimited studio classes, saunas, and composition scans. Would you like to check them out?`,
+        text: `Hey! Welcome to Titan Forge. What would you like to know about our gym or website today?`
+      };
+    }
+    if (q.includes('how are you') || q.includes('how r u')) {
+      return {
+        text: `I'm doing great, thank you! Ready to help you with gym memberships, timings, coaches, or facilities. What's on your mind?`
+      };
+    }
+    if (q.includes('thank') || q.includes('thx')) {
+      return {
+        text: `You're very welcome! Let me know if you need any other information. See you on the training floor!`
+      };
+    }
+
+    // 2. Pricing & Cost questions
+    if (q.includes('price') || q.includes('pricing') || q.includes('cost') || q.includes('how much') || q.includes('fee') || q.includes('membership cost')) {
+      return {
+        text: `Our memberships are:\n• Basic: $39/mo ($32/mo billed annually)\n• Standard: $69/mo ($55/mo billed annually) — Includes all studio classes & saunas\n• VIP: $109/mo ($89/mo billed annually) — 24/7 keyless biometric access & plunge\n• Personal Training: $199/mo ($169/mo billed annually) — Includes 8 monthly 1-on-1 PT sessions\n\nNo joining fees with current promos!`,
         action: {
           type: 'scroll',
-          label: 'View Membership Plans',
+          label: 'View Pricing Cards',
           target: '#membership'
         }
       };
     }
 
-    // Free trial / Guest pass
-    if (q.includes('trial') || q.includes('guest') || q.includes('free pass') || q.includes('visit') || q.includes('demo')) {
+    // 3. Free Pass / Trial / Demo / Visit
+    if (q.includes('free') || q.includes('trial') || q.includes('guest pass') || q.includes('pass') || q.includes('visit') || q.includes('demo') || q.includes('tour')) {
       return {
-        text: `Yes! We provide a complimentary 1-Day VIP Guest Pass for local residents to experience our equipment, sauna, and meet our coaches. You can claim it online or text us on WhatsApp right away!`,
+        text: `Yes, we offer a 100% free 1-Day VIP Guest Pass for local residents! You get full floor access, Olympic racks, and the cedar sauna. You can pick your date and register in the form below.`,
         action: {
           type: 'scroll',
           label: 'Claim Free 1-Day Pass',
@@ -73,45 +90,120 @@ export const GymChatbot: React.FC = () => {
       };
     }
 
-    // Coaches / Trainers
-    if (q.includes('trainer') || q.includes('coach') || q.includes('pt') || q.includes('personal train')) {
-      const trainerList = TRAINERS.map(t => `• ${t.name} (${t.specialization})`).join('\n');
+    // 4. Hours / Timings / Opening / Closing / Sunday
+    if (q.includes('hour') || q.includes('timing') || q.includes('time') || q.includes('when do you open') || q.includes('close') || q.includes('sunday') || q.includes('weekend')) {
+      const hoursList = GYM_CONFIG.hours.map(h => `• ${h.days}: ${h.time}`).join('\n');
       return {
-        text: `Our Tier-3 Master Coaches are certified athletes and sports scientists:\n\n${trainerList}\n\nYou can book 1-on-1 personalized coaching splits or form checks anytime!`,
+        text: `Our hours are:\n${hoursList}\n\nVIP members have 24/7 keyless biometric access.`
+      };
+    }
+
+    // 5. Specific Coaches / Trainers
+    if (q.includes('marcus')) {
+      return {
+        text: `Marcus "The Hammer" Vance is our Head Strength Coach & Co-Founder. 12+ years experience, CSCS certified, specializing in powerlifting and hypertrophy.`,
+        action: { type: 'scroll', label: 'View Marcus Profile', target: '#trainers' }
+      };
+    }
+    if (q.includes('elena')) {
+      return {
+        text: `Elena Rostova is our Master HIIT & MetCon Director. 9+ years experience, CrossFit Level 3, specializing in high-intensity conditioning and mobility.`,
+        action: { type: 'scroll', label: 'View Elena Profile', target: '#trainers' }
+      };
+    }
+    if (q.includes('darius')) {
+      return {
+        text: `Darius King is our Nutrition & Body Recomposition Specialist with 10+ years experience in contest prep, macro calibration, and lean bulking.`,
+        action: { type: 'scroll', label: 'View Darius Profile', target: '#trainers' }
+      };
+    }
+    if (q.includes('maya')) {
+      return {
+        text: `Maya Lin leads Mobility & Vinyasa Yoga Flow (E-RYT 500, FRC Mobility Specialist) focusing on joint decompression and athletic recovery.`,
+        action: { type: 'scroll', label: 'View Maya Profile', target: '#trainers' }
+      };
+    }
+    if (q.includes('trainer') || q.includes('coach') || q.includes('pt') || q.includes('personal training')) {
+      return {
+        text: `We have 25+ certified master coaches led by Marcus Vance (Strength), Elena Rostova (CrossFit/HIIT), Darius King (Body Recomp), and Maya Lin (Mobility). 1-on-1 personal training packages are available with custom meal plans.`,
         action: {
           type: 'scroll',
-          label: 'Meet Our Trainers',
+          label: 'See All Coaches',
           target: '#trainers'
         }
       };
     }
 
-    // Programs / Classes
-    if (q.includes('program') || q.includes('workout') || q.includes('class') || q.includes('crossfit') || q.includes('yoga') || q.includes('cardio') || q.includes('fat loss')) {
-      const progList = PROGRAMS.slice(0, 5).map(p => `• ${p.title} (${p.category})`).join('\n');
+    // 6. Specific Programs (Weight Loss, CrossFit, Yoga, etc.)
+    if (q.includes('weight loss') || q.includes('fat burn') || q.includes('shred') || q.includes('diet') || q.includes('lose weight')) {
       return {
-        text: `We offer 8 curated disciplines:\n\n${progList}\n...plus Powerlifting, Functional Athletics, and Personal Coaching! Every workout splits are tailored to your heart rate and VO2 targets.`,
+        text: `Our Weight Loss & Shred program uses high-metabolic conditioning and heart-rate monitored circuits burning 700-950 kcal/session, with bi-weekly 3D body scans.`,
+        action: { type: 'scroll', label: 'View Weight Loss Program', target: '#programs' }
+      };
+    }
+    if (q.includes('crossfit') || q.includes('wod') || q.includes('metcon')) {
+      return {
+        text: `Our CrossFit & MetCon discipline features daily WODs, rope climbs, kettlebells, Olympic lifting, and community leaderboards with certified Level 3 coaches.`,
+        action: { type: 'scroll', label: 'View CrossFit Program', target: '#programs' }
+      };
+    }
+    if (q.includes('yoga') || q.includes('stretch') || q.includes('mobility')) {
+      return {
+        text: `Our Vinyasa Yoga & Mobility program offers heated and non-heated sessions focusing on joint longevity, hip openers, spine decompression, and foam rolling.`,
+        action: { type: 'scroll', label: 'View Yoga Program', target: '#programs' }
+      };
+    }
+    if (q.includes('strength') || q.includes('powerlifting') || q.includes('deadlift') || q.includes('squat') || q.includes('bench')) {
+      return {
+        text: `Our Powerlifting & Strength program focuses on the big compound lifts (Squat, Bench, Deadlift) on competition Eleiko platforms with 1RM testing and form analysis.`,
+        action: { type: 'scroll', label: 'View Strength Program', target: '#programs' }
+      };
+    }
+    if (q.includes('cardio') || q.includes('treadmill') || q.includes('running') || q.includes('endurance')) {
+      return {
+        text: `Our Cardio program uses Woodway motorless curved treadmills, Concept2 rowers, and SkiErgs designed for VO2 max optimization and athletic stamina.`,
+        action: { type: 'scroll', label: 'View Cardio Program', target: '#programs' }
+      };
+    }
+    if (q.includes('program') || q.includes('workout') || q.includes('class') || q.includes('classes')) {
+      return {
+        text: `We offer 8 programs:\n1. Weight Loss & Shred\n2. Muscle Building & Hypertrophy\n3. Elite Cardio & Endurance\n4. Powerlifting & Strength\n5. CrossFit & MetCon\n6. Vinyasa Yoga & Mobility\n7. 1-on-1 Personal Coaching\n8. Functional Agility & Athletics`,
         action: {
           type: 'scroll',
-          label: 'Explore All Programs',
+          label: 'Browse Programs',
           target: '#programs'
         }
       };
     }
 
-    // Hours / Timings
-    if (q.includes('time') || q.includes('hour') || q.includes('open') || q.includes('close') || q.includes('sunday')) {
-      const hoursList = GYM_CONFIG.hours.map(h => `• ${h.days}: ${h.time}`).join('\n');
+    // 7. Facilities / Sauna / Cold Plunge / Showers / Lockers
+    if (q.includes('sauna') || q.includes('cold plunge') || q.includes('plunge') || q.includes('recovery')) {
       return {
-        text: `Here are our regular gym hours:\n\n${hoursList}\n\nOur members on the VIP plan also enjoy 24/7 keyless biometric access!`
+        text: `Yes! We have a luxury thermal recovery suite with 190°F Finnish cedar rock dry saunas and 45°F medical cold plunge tubs to cut muscle soreness and inflammation.`,
+        action: { type: 'scroll', label: 'View Recovery Suite', target: '#facilities' }
+      };
+    }
+    if (q.includes('shower') || q.includes('locker') || q.includes('towel')) {
+      return {
+        text: `We have executive locker rooms with digital pin-code lockers, rainfall showers with luxury organic bath amenities, grooming stations, and free fresh towel service.`,
+        action: { type: 'scroll', label: 'View Amenities', target: '#facilities' }
+      };
+    }
+    if (q.includes('facility') || q.includes('facilities') || q.includes('equipment') || q.includes('machines') || q.includes('gym size')) {
+      return {
+        text: `Our 15,000 sq. ft. facility includes: 10 Eleiko Olympic platforms, Arsenal & Prime Strength machines, Woodway curved treadmills, cedar saunas, cold plunge tubs, and HEPA-13 air filtration at 67°F.`,
+        action: {
+          type: 'scroll',
+          label: 'View Facilities',
+          target: '#facilities'
+        }
       };
     }
 
-    // Offers / Promo codes
-    if (q.includes('offer') || q.includes('discount') || q.includes('promo') || q.includes('coupon') || q.includes('deal')) {
-      const offerList = OFFERS.map(o => `• ${o.title} (Code: ${o.code})`).join('\n');
+    // 8. Offers / Promo Codes / Student Discount
+    if (q.includes('discount') || q.includes('offer') || q.includes('promo') || q.includes('coupon') || q.includes('code') || q.includes('deal') || q.includes('student')) {
       return {
-        text: `We have great promotions running right now:\n\n${offerList}\n\nYou can apply TITAN50 to get $0 enrollment and 50% off your first month!`,
+        text: `Current promos:\n• Code "TITAN50": $0 enrollment fee + 50% off your 1st month\n• Code "STUDENT25": 25% flat discount for students & cadets\n• Code "TRAINTOGETHER": Bring a friend and both get 1 month free!`,
         action: {
           type: 'scroll',
           label: 'View Active Offers',
@@ -120,47 +212,56 @@ export const GymChatbot: React.FC = () => {
       };
     }
 
-    // Facilities / Sauna / Locker
-    if (q.includes('facility') || q.includes('sauna') || q.includes('shower') || q.includes('locker') || q.includes('equipment') || q.includes('plunge')) {
+    // 9. Location / Address / Parking
+    if (q.includes('where') || q.includes('location') || q.includes('address') || q.includes('city') || q.includes('parking') || q.includes('map') || q.includes('direction')) {
       return {
-        text: `Our 15,000 sq. ft. facility features Olympic Eleiko lifting platforms, Arsenal Strength machines, Finnish cedar dry rock saunas, 45°F cold plunge tubs, and executive digital lockers with fresh towel service.`,
+        text: `Address: ${GYM_CONFIG.address}.\n\nFree on-site covered parking is available for all members. There's an interactive Google Map with directions below.`,
         action: {
           type: 'scroll',
-          label: 'See Facilities & Gear',
-          target: '#facilities'
-        }
-      };
-    }
-
-    // WhatsApp / Human Help / Phone
-    if (q.includes('whatsapp') || q.includes('phone') || q.includes('call') || q.includes('human') || q.includes('talk') || q.includes('chat')) {
-      return {
-        text: `You can reach our concierge team directly on WhatsApp or phone at +91 88850 23504. We usually respond within minutes!`,
-        action: {
-          type: 'whatsapp',
-          label: 'Open WhatsApp (+91 88850 23504)'
-        }
-      };
-    }
-
-    // Location / Address
-    if (q.includes('where') || q.includes('location') || q.includes('address') || q.includes('map') || q.includes('direction')) {
-      return {
-        text: `We are located at: ${GYM_CONFIG.address}. Free covered member parking is provided on-site.`,
-        action: {
-          type: 'scroll',
-          label: 'View On Google Maps',
+          label: 'View Map & Directions',
           target: '#contact'
         }
       };
     }
 
-    // Fallback natural answer
+    // 10. Contact / Phone / Email
+    if (q.includes('phone') || q.includes('contact') || q.includes('email') || q.includes('call') || q.includes('number')) {
+      return {
+        text: `Contact details:\n• Phone: ${GYM_CONFIG.phone}\n• Email: ${GYM_CONFIG.email}\n• Location: ${GYM_CONFIG.address}\n\nOur concierge desk is staffed every day during opening hours.`,
+        action: {
+          type: 'scroll',
+          label: 'Contact Information',
+          target: '#contact'
+        }
+      };
+    }
+
+    // 11. Cancellation / Contracts
+    if (q.includes('cancel') || q.includes('contract') || q.includes('lock in') || q.includes('hidden') || q.includes('commitment')) {
+      return {
+        text: `No long-term locked contracts! All our memberships are month-to-month and can be paused or cancelled at any time with 14 days written notice. Zero cancellation fees.`
+      };
+    }
+
+    // 12. About the Gym / Who are you
+    if (q.includes('about') || q.includes('who are you') || q.includes('what is titan forge') || q.includes('story')) {
+      return {
+        text: `Titan Forge is a 15,000 sq. ft. athletic performance gym founded by coaches Marcus Vance and Elena Rostova. We combine Olympic lifting, CrossFit, and luxury recovery saunas with zero-ego community culture.`,
+        action: {
+          type: 'scroll',
+          label: 'Read Our Story',
+          target: '#about'
+        }
+      };
+    }
+
+    // 13. Direct natural fallback - concise, not repetitive
     return {
-      text: `Got it! Whether you're aiming for fat shred, powerlifting, or general wellness, we'd love to help. You can also chat directly with our team on WhatsApp (+91 88850 23504) for quick personalized guidance!`,
+      text: `Regarding "${query}": You can check our exact details on the website for memberships, 8 training programs, coaches, or facilities. Would you like me to take you to the programs, pricing, or registration form?`,
       action: {
-        type: 'whatsapp',
-        label: 'Chat on WhatsApp'
+        type: 'scroll',
+        label: 'View Programs & Schedule',
+        target: '#programs'
       }
     };
   };
@@ -176,7 +277,7 @@ export const GymChatbot: React.FC = () => {
       timestamp: 'Just now'
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev: Message[]) => [...prev, userMsg]);
     setInputValue('');
     setIsTyping(true);
 
@@ -189,21 +290,16 @@ export const GymChatbot: React.FC = () => {
         timestamp: 'Just now',
         action: response.action
       };
-      setMessages(prev => [...prev, botMsg]);
+      setMessages((prev: Message[]) => [...prev, botMsg]);
       setIsTyping(false);
-    }, 600);
+    }, 350);
   };
 
   const handleActionClick = (action: Message['action']) => {
     if (!action) return;
-    if (action.type === 'whatsapp') {
-      const url = `https://wa.me/${GYM_CONFIG.whatsappNumber}?text=${encodeURIComponent(GYM_CONFIG.whatsappDefaultMsg)}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } else if (action.type === 'scroll' && action.target) {
-      setIsOpen(false);
-      const elem = document.querySelector(action.target);
-      elem?.scrollIntoView({ behavior: 'smooth' });
-    }
+    setIsOpen(false);
+    const elem = document.querySelector(action.target);
+    elem?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -220,12 +316,12 @@ export const GymChatbot: React.FC = () => {
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-gym-dark" />
           </div>
           <span className="text-xs font-black uppercase tracking-wider hidden sm:inline-block">
-            Ask Gym AI
+            Ask Website AI
           </span>
         </button>
       </div>
 
-      {/* Chat Window Modal / Drawer */}
+      {/* Chat Window Modal */}
       {isOpen && (
         <div className="fixed bottom-20 left-4 sm:left-6 z-50 w-[92vw] sm:w-[390px] h-[520px] max-h-[80vh] bg-gym-card border border-gym-border rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-fadeIn backdrop-blur-xl">
           
@@ -238,11 +334,11 @@ export const GymChatbot: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-sm font-black text-white font-heading uppercase tracking-wide">
-                  Titan Concierge AI
+                  Titan Concierge
                 </h4>
                 <p className="text-[10px] text-emerald-400 flex items-center gap-1">
                   <span>● Online</span>
-                  <span className="text-slate-400">• Ready to help</span>
+                  <span className="text-slate-400">• Direct answers</span>
                 </p>
               </div>
             </div>
@@ -257,17 +353,17 @@ export const GymChatbot: React.FC = () => {
           </div>
 
           {/* Messages Feed */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
-            {messages.map((m) => (
+          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 text-xs">
+            {messages.map((m: Message) => (
               <div
                 key={m.id}
                 className={`flex flex-col ${m.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div
-                  className={`max-w-[85%] p-3.5 rounded-2xl whitespace-pre-line leading-relaxed shadow-md ${
+                  className={`max-w-[88%] p-3.5 rounded-2xl whitespace-pre-line leading-relaxed shadow-md ${
                     m.sender === 'user'
                       ? 'bg-gym-accent text-white rounded-br-sm'
-                      : 'bg-gym-charcoal/90 text-slate-200 border border-white/5 rounded-bl-sm'
+                      : 'bg-gym-charcoal/95 text-slate-200 border border-white/5 rounded-bl-sm'
                   }`}
                 >
                   {m.text}
@@ -275,7 +371,7 @@ export const GymChatbot: React.FC = () => {
                   {m.action && (
                     <button
                       onClick={() => handleActionClick(m.action)}
-                      className="mt-3 w-full py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors border border-white/10 cursor-pointer"
+                      className="mt-3 w-full py-2 px-3 rounded-xl bg-white/10 hover:bg-gym-accent text-white font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors border border-white/10 cursor-pointer"
                     >
                       <span>{m.action.label}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -315,7 +411,7 @@ export const GymChatbot: React.FC = () => {
           <div className="p-3 bg-gym-charcoal border-t border-gym-border flex items-center gap-2">
             <input
               type="text"
-              placeholder="Ask anything about the gym..."
+              placeholder="Ask a question..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
