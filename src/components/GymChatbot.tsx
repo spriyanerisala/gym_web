@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bot, Send, X, ChevronRight, Dumbbell } from 'lucide-react';
 import { GYM_CONFIG } from '../data/gymData';
 
@@ -8,13 +9,14 @@ interface Message {
   text: string;
   timestamp: string;
   action?: {
-    type: 'scroll';
+    type: 'route';
     label: string;
-    target: string;
+    path: string;
   };
 }
 
 export const GymChatbot: React.FC = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -71,9 +73,9 @@ export const GymChatbot: React.FC = () => {
       return {
         text: `Our memberships are:\n• Basic: $39/mo ($32/mo billed annually)\n• Standard: $69/mo ($55/mo billed annually) — Includes all studio classes & saunas\n• VIP: $109/mo ($89/mo billed annually) — 24/7 keyless biometric access & plunge\n• Personal Training: $199/mo ($169/mo billed annually) — Includes 8 monthly 1-on-1 PT sessions\n\nNo joining fees with current promos!`,
         action: {
-          type: 'scroll',
-          label: 'View Pricing Cards',
-          target: '#membership'
+          type: 'route',
+          label: 'View Pricing Page',
+          path: '/membership'
         }
       };
     }
@@ -83,9 +85,9 @@ export const GymChatbot: React.FC = () => {
       return {
         text: `Yes, we offer a 100% free 1-Day VIP Guest Pass for local residents! You get full floor access, Olympic racks, and the cedar sauna. You can pick your date and register in the form below.`,
         action: {
-          type: 'scroll',
-          label: 'Claim Free 1-Day Pass',
-          target: '#contact'
+          type: 'route',
+          label: 'Go To Free Pass Form',
+          path: '/contact'
         }
       };
     }
@@ -102,34 +104,34 @@ export const GymChatbot: React.FC = () => {
     if (q.includes('marcus')) {
       return {
         text: `Marcus "The Hammer" Vance is our Head Strength Coach & Co-Founder. 12+ years experience, CSCS certified, specializing in powerlifting and hypertrophy.`,
-        action: { type: 'scroll', label: 'View Marcus Profile', target: '#trainers' }
+        action: { type: 'route', label: 'View Trainers Page', path: '/trainers' }
       };
     }
     if (q.includes('elena')) {
       return {
         text: `Elena Rostova is our Master HIIT & MetCon Director. 9+ years experience, CrossFit Level 3, specializing in high-intensity conditioning and mobility.`,
-        action: { type: 'scroll', label: 'View Elena Profile', target: '#trainers' }
+        action: { type: 'route', label: 'View Trainers Page', path: '/trainers' }
       };
     }
     if (q.includes('darius')) {
       return {
         text: `Darius King is our Nutrition & Body Recomposition Specialist with 10+ years experience in contest prep, macro calibration, and lean bulking.`,
-        action: { type: 'scroll', label: 'View Darius Profile', target: '#trainers' }
+        action: { type: 'route', label: 'View Trainers Page', path: '/trainers' }
       };
     }
     if (q.includes('maya')) {
       return {
         text: `Maya Lin leads Mobility & Vinyasa Yoga Flow (E-RYT 500, FRC Mobility Specialist) focusing on joint decompression and athletic recovery.`,
-        action: { type: 'scroll', label: 'View Maya Profile', target: '#trainers' }
+        action: { type: 'route', label: 'View Trainers Page', path: '/trainers' }
       };
     }
     if (q.includes('trainer') || q.includes('coach') || q.includes('pt') || q.includes('personal training')) {
       return {
         text: `We have 25+ certified master coaches led by Marcus Vance (Strength), Elena Rostova (CrossFit/HIIT), Darius King (Body Recomp), and Maya Lin (Mobility). 1-on-1 personal training packages are available with custom meal plans.`,
         action: {
-          type: 'scroll',
+          type: 'route',
           label: 'See All Coaches',
-          target: '#trainers'
+          path: '/trainers'
         }
       };
     }
@@ -138,40 +140,40 @@ export const GymChatbot: React.FC = () => {
     if (q.includes('weight loss') || q.includes('fat burn') || q.includes('shred') || q.includes('diet') || q.includes('lose weight')) {
       return {
         text: `Our Weight Loss & Shred program uses high-metabolic conditioning and heart-rate monitored circuits burning 700-950 kcal/session, with bi-weekly 3D body scans.`,
-        action: { type: 'scroll', label: 'View Weight Loss Program', target: '#programs' }
+        action: { type: 'route', label: 'View Programs Page', path: '/programs' }
       };
     }
     if (q.includes('crossfit') || q.includes('wod') || q.includes('metcon')) {
       return {
         text: `Our CrossFit & MetCon discipline features daily WODs, rope climbs, kettlebells, Olympic lifting, and community leaderboards with certified Level 3 coaches.`,
-        action: { type: 'scroll', label: 'View CrossFit Program', target: '#programs' }
+        action: { type: 'route', label: 'View Programs Page', path: '/programs' }
       };
     }
     if (q.includes('yoga') || q.includes('stretch') || q.includes('mobility')) {
       return {
         text: `Our Vinyasa Yoga & Mobility program offers heated and non-heated sessions focusing on joint longevity, hip openers, spine decompression, and foam rolling.`,
-        action: { type: 'scroll', label: 'View Yoga Program', target: '#programs' }
+        action: { type: 'route', label: 'View Programs Page', path: '/programs' }
       };
     }
     if (q.includes('strength') || q.includes('powerlifting') || q.includes('deadlift') || q.includes('squat') || q.includes('bench')) {
       return {
         text: `Our Powerlifting & Strength program focuses on the big compound lifts (Squat, Bench, Deadlift) on competition Eleiko platforms with 1RM testing and form analysis.`,
-        action: { type: 'scroll', label: 'View Strength Program', target: '#programs' }
+        action: { type: 'route', label: 'View Programs Page', path: '/programs' }
       };
     }
     if (q.includes('cardio') || q.includes('treadmill') || q.includes('running') || q.includes('endurance')) {
       return {
         text: `Our Cardio program uses Woodway motorless curved treadmills, Concept2 rowers, and SkiErgs designed for VO2 max optimization and athletic stamina.`,
-        action: { type: 'scroll', label: 'View Cardio Program', target: '#programs' }
+        action: { type: 'route', label: 'View Programs Page', path: '/programs' }
       };
     }
     if (q.includes('program') || q.includes('workout') || q.includes('class') || q.includes('classes')) {
       return {
         text: `We offer 8 programs:\n1. Weight Loss & Shred\n2. Muscle Building & Hypertrophy\n3. Elite Cardio & Endurance\n4. Powerlifting & Strength\n5. CrossFit & MetCon\n6. Vinyasa Yoga & Mobility\n7. 1-on-1 Personal Coaching\n8. Functional Agility & Athletics`,
         action: {
-          type: 'scroll',
-          label: 'Browse Programs',
-          target: '#programs'
+          type: 'route',
+          label: 'Browse Programs Page',
+          path: '/programs'
         }
       };
     }
@@ -180,22 +182,22 @@ export const GymChatbot: React.FC = () => {
     if (q.includes('sauna') || q.includes('cold plunge') || q.includes('plunge') || q.includes('recovery')) {
       return {
         text: `Yes! We have a luxury thermal recovery suite with 190°F Finnish cedar rock dry saunas and 45°F medical cold plunge tubs to cut muscle soreness and inflammation.`,
-        action: { type: 'scroll', label: 'View Recovery Suite', target: '#facilities' }
+        action: { type: 'route', label: 'View Facilities Page', path: '/facilities' }
       };
     }
     if (q.includes('shower') || q.includes('locker') || q.includes('towel')) {
       return {
         text: `We have executive locker rooms with digital pin-code lockers, rainfall showers with luxury organic bath amenities, grooming stations, and free fresh towel service.`,
-        action: { type: 'scroll', label: 'View Amenities', target: '#facilities' }
+        action: { type: 'route', label: 'View Facilities Page', path: '/facilities' }
       };
     }
     if (q.includes('facility') || q.includes('facilities') || q.includes('equipment') || q.includes('machines') || q.includes('gym size')) {
       return {
         text: `Our 15,000 sq. ft. facility includes: 10 Eleiko Olympic platforms, Arsenal & Prime Strength machines, Woodway curved treadmills, cedar saunas, cold plunge tubs, and HEPA-13 air filtration at 67°F.`,
         action: {
-          type: 'scroll',
-          label: 'View Facilities',
-          target: '#facilities'
+          type: 'route',
+          label: 'View Facilities Page',
+          path: '/facilities'
         }
       };
     }
@@ -205,9 +207,9 @@ export const GymChatbot: React.FC = () => {
       return {
         text: `Current promos:\n• Code "TITAN50": $0 enrollment fee + 50% off your 1st month\n• Code "STUDENT25": 25% flat discount for students & cadets\n• Code "TRAINTOGETHER": Bring a friend and both get 1 month free!`,
         action: {
-          type: 'scroll',
-          label: 'View Active Offers',
-          target: '#offers'
+          type: 'route',
+          label: 'View Offers Page',
+          path: '/offers'
         }
       };
     }
@@ -217,9 +219,9 @@ export const GymChatbot: React.FC = () => {
       return {
         text: `Address: ${GYM_CONFIG.address}.\n\nFree on-site covered parking is available for all members. There's an interactive Google Map with directions below.`,
         action: {
-          type: 'scroll',
-          label: 'View Map & Directions',
-          target: '#contact'
+          type: 'route',
+          label: 'View Contact & Map Page',
+          path: '/contact'
         }
       };
     }
@@ -229,9 +231,9 @@ export const GymChatbot: React.FC = () => {
       return {
         text: `Contact details:\n• Phone: ${GYM_CONFIG.phone}\n• Email: ${GYM_CONFIG.email}\n• Location: ${GYM_CONFIG.address}\n\nOur concierge desk is staffed every day during opening hours.`,
         action: {
-          type: 'scroll',
-          label: 'Contact Information',
-          target: '#contact'
+          type: 'route',
+          label: 'Open Contact Page',
+          path: '/contact'
         }
       };
     }
@@ -248,9 +250,9 @@ export const GymChatbot: React.FC = () => {
       return {
         text: `Titan Forge is a 15,000 sq. ft. athletic performance gym founded by coaches Marcus Vance and Elena Rostova. We combine Olympic lifting, CrossFit, and luxury recovery saunas with zero-ego community culture.`,
         action: {
-          type: 'scroll',
-          label: 'Read Our Story',
-          target: '#about'
+          type: 'route',
+          label: 'Read Full About Page',
+          path: '/about'
         }
       };
     }
@@ -259,9 +261,9 @@ export const GymChatbot: React.FC = () => {
     return {
       text: `Regarding "${query}": You can check our exact details on the website for memberships, 8 training programs, coaches, or facilities. Would you like me to take you to the programs, pricing, or registration form?`,
       action: {
-        type: 'scroll',
-        label: 'View Programs & Schedule',
-        target: '#programs'
+        type: 'route',
+        label: 'View Programs Page',
+        path: '/programs'
       }
     };
   };
@@ -298,8 +300,7 @@ export const GymChatbot: React.FC = () => {
   const handleActionClick = (action: Message['action']) => {
     if (!action) return;
     setIsOpen(false);
-    const elem = document.querySelector(action.target);
-    elem?.scrollIntoView({ behavior: 'smooth' });
+    navigate(action.path);
   };
 
   return (

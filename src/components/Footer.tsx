@@ -1,4 +1,8 @@
-import { Flame, Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  Flame, Phone, Mail, MapPin, ArrowUp 
+} from 'lucide-react';
 import { InstagramIcon, TwitterIcon, YouTubeIcon, LinkedInIcon } from './SocialIcons';
 import { GYM_CONFIG, PROGRAMS } from '../data/gymData';
 
@@ -8,7 +12,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-gym-dark text-slate-400 border-t border-white/10 pt-16 pb-12 relative overflow-hidden">
+    <footer className="bg-gym-dark text-slate-400 border-t border-white/10 pt-16 pb-12 relative overflow-hidden mt-auto">
       {/* Background glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gym-accent/5 rounded-full blur-[150px] pointer-events-none" />
 
@@ -19,14 +23,14 @@ export const Footer: React.FC = () => {
           
           {/* Brand Info (Col 1 & 2) */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
+            <Link to="/" className="flex items-center gap-2.5 w-fit">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gym-accent to-gym-accentCrimson flex items-center justify-center shadow-lg shadow-gym-accent/40">
                 <Flame className="w-6 h-6 text-white" />
               </div>
               <span className="text-3xl font-black tracking-wider text-white font-heading">
                 TITAN<span className="text-gym-accent">FORGE</span>
               </span>
-            </div>
+            </Link>
 
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
               The premier athletic club engineered for relentless progression. Featuring Olympic platforms, science-driven hypertrophy training, and five-star thermal recovery suites.
@@ -76,26 +80,36 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links (Col 3) */}
+          {/* Quick Page Links (Col 3) */}
           <div>
             <h4 className="text-base font-bold text-white font-heading uppercase tracking-wider mb-4">
-              Explore Links
+              Website Pages
             </h4>
             <ul className="space-y-2.5 text-xs">
-              {['Home', 'About Us', 'Membership Plans', 'Fitness Programs', 'Trainer Profiles', 'Gym Gallery', 'Facilities'].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase().split(' ')[0]}`}
+              {[
+                { label: 'Home', to: '/' },
+                { label: 'About Us', to: '/about' },
+                { label: 'Membership Plans', to: '/membership' },
+                { label: 'Fitness Programs', to: '/programs' },
+                { label: 'Trainer Profiles', to: '/trainers' },
+                { label: 'Facilities & Gear', to: '/facilities' },
+                { label: 'Gym Gallery', to: '/gallery' },
+                { label: 'Special Offers', to: '/offers' },
+                { label: 'Contact & Form', to: '/contact' }
+              ].map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
                     className="hover:text-gym-accent transition-colors"
                   >
-                    {item}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Fitness Programs (Col 4) */}
+          {/* Fitness Disciplines (Col 4) */}
           <div>
             <h4 className="text-base font-bold text-white font-heading uppercase tracking-wider mb-4">
               Disciplines
@@ -103,9 +117,9 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs">
               {PROGRAMS.slice(0, 6).map((prog) => (
                 <li key={prog.id}>
-                  <a href="#programs" className="hover:text-gym-accent transition-colors">
+                  <Link to="/programs" className="hover:text-gym-accent transition-colors">
                     {prog.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
